@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CRUD Utilisateurs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <h1 class="text-3xl font-bold mb-4">Gestion des Utilisateurs</h1>
+    
+    <!-- Formulaire de création et modification -->
+    <form action="/add" method="POST" class="mb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <input name="lastName" type="text" placeholder="Nom" class="p-2 border rounded w-full">
+        <input name="firstName" type="text" placeholder="Prénom" class="p-2 border rounded w-full">
+        <input name="email" type="email" placeholder="Email" class="p-2 border rounded w-full">
+      </div>
+      <button type="submit" class="bg-blue-500 text-white p-2 rounded">Ajouter</button>
+    </form>
+  
+    <!-- Tableau des utilisateurs -->
+    <div class="overflow-x-auto">
+        <% if (users.length > 0) { %>
+          <table class="min-w-full bg-white rounded-lg">
+            <thead>
+              <tr>
+                <th class="border px-4 py-2">ID</th>
+                <th class="border px-4 py-2">Sélectionner</th>
+                <th class="border px-4 py-2">Nom</th>
+                <th class="border px-4 py-2">Prénom</th>
+                <th class="border px-4 py-2">Email</th>
+                <th class="border px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% users.forEach((user, index) => { %>
+                <tr>
+                  <td class="border px-4 py-2"><%= index + 1 %></td>
+                  <td class="border px-4 py-2 text-center">
+                    <input type="checkbox" class="user-checkbox" data-index="<%= index %>">
+                  </td>
+                  <td class="border px-4 py-2">
+                    <input type="text" name="lastName" value="<%= user[0] %>" class="user-input" data-field="lastName" data-index="<%= index %>" disabled>
+                  </td>
+                  <td class="border px-4 py-2">
+                    <input type="text" name="firstName" value="<%= user[1] %>" class="user-input" data-field="firstName" data-index="<%= index %>" disabled>
+                  </td>
+                  <td class="border px-4 py-2">
+                    <input type="email" name="email" value="<%= user[2] %>" class="user-input w-52" data-field="email" data-index="<%= index %>" disabled>
+                  </td>
+                  <td class="border px-4 py-2 text-center">
+                    <button id="modify-button" type="button" class="bg-yellow-500 text-white p-1 rounded mb-2 modify-button" data-index="<%= index %>">Modifier</button>
+                    <form action="/delete" method="POST" class="inline">
+                      <input type="hidden" name="index" value="<%= index %>">
+                      <button type="submit" class="bg-red-500 text-white p-1 rounded">Supprimer</button>
+                    </form>
+                  </td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        <% } else { %>
+          <p class="text-center text-gray-600">Aucun utilisateur ajouté. Veuillez ajouter un utilisateur.</p>
+        <% } %>
+      </div>
+
+    <script>
+      // Script pour activer les champs de saisie lorsque la case est cochée
+      document.querySelectorAll('.user-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', (e) => {
+          const index = e.target.getAttribute('data-index');
+          const inputs = document.querySelectorAll(`.user-input[data-index="${index}"]`);
+          
+          // Désactiver tous les autres checkboxes
+          document.querySelectorAll('.user-checkbox').forEach(cb => {
+            if (cb !== checkbox) {
+              cb.checked = false;
+              const otherInputs = document.querySelectorAll(`.user-input[data-index="${cb.getAttribute('data-index')}"]`);
+              otherInputs.forEach(input => {
+                input.disabled = true;
+              });
+            }
+          });
+          
+          inputs.forEach(input => {
+            input.disabled = !e.target.checked;
+          });
+        });
+      });
+
+// Script pour modifier l'utilisateur
+document.querySelectorAll('.modify-button').forEach(button => {
+  button.addEventListener('click', (e) => {
+    const index = e.target.getAttribute('data-index');
+    const inputs = document.querySelectorAll(`.user-input[data-index="${index}"]`);
+    
+    // Activez les champs de saisie pour modification
+    inputs.forEach(input => {
+      input.disabled = false; // Désactiver la saisie pour modification
+    });
+    
+    const data = {
+      index,
+      lastName: inputs[0].value,
+      firstName: inputs[1].value,
+      email: inputs[2].value
+    };
+    
+    fetch('/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    }).then(() => {
+      window.location.reload();
+    });
+  });
+});
+    </script>
+  </body>
+</html>
