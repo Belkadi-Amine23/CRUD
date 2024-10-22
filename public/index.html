@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion des Utilisateurs - CSR</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-8">
+  <h1 class="text-3xl font-bold mb-4">Gestion des Utilisateurs - CSR</h1>
+
+  <!-- Formulaire d'ajout -->
+  <form id="user-form" class="mb-8">
+    <div class="grid grid-cols-3 gap-4 mb-4">
+      <input id="lastName" type="text" placeholder="Nom" class="p-2 border rounded">
+      <input id="firstName" type="text" placeholder="Prénom" class="p-2 border rounded">
+      <input id="email" type="email" placeholder="Email" class="p-2 border rounded">
+    </div>
+    <button type="submit" class="bg-blue-500 text-white p-2 rounded">Ajouter</button>
+    <p id="error-message" class="text-red-500 mt-2 hidden">Veuillez remplir tous les champs.</p>
+  </form>
+
+  <!-- Tableau des utilisateurs -->
+  <table class="min-w-full bg-white rounded-lg">
+    <thead>
+      <tr>
+        <th class="border px-4 py-2">Sélection</th>
+        <th class="border px-4 py-2">ID</th>
+        <th class="border px-4 py-2">Nom</th>
+        <th class="border px-4 py-2">Prénom</th> 
+        <th class="border px-4 py-2">Email</th>
+      </tr>
+    </thead>
+    <tbody id="user-table">
+      <!-- Les utilisateurs seront insérés ici -->
+    </tbody>
+  </table>
+
+  <script src="/js/app.js"></script>
+</body>
+</html>
