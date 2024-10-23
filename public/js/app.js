@@ -18,18 +18,30 @@ function loadUsers() {
           } else {
               users.forEach((user, index) => {
                   userTable.innerHTML += `
-                      <tr>
-                          <td class="border px-4 py-2">
-                              <input type="checkbox" class="select-checkbox" onclick="handleCheckboxChange(this, ${index})" />
-                          </td>
-                          <td class="border px-4 py-2 editable" data-field="firstName">${user.firstName}</td>
-                          <td class="border px-4 py-2 editable" data-field="lastName">${user.lastName}</td>
-                          <td class="border px-4 py-2 editable" data-field="email">${user.email}</td>
-                          <td class="border px-4 py-2">
-                              <button class="bg-yellow-500 text-white p-1 rounded" onclick="editUser(${index})" disabled>Modifier</button>
-                              <button class="bg-red-500 text-white p-1 rounded" onclick="deleteUser(${index})">Supprimer</button>
-                          </td>
-                      </tr>
+        <tr>
+            <!-- ID Column -->
+            <td class="border px-4 py-2">${index + 1}</td>
+
+            <!-- Checkbox Column -->
+            <td class="border px-4 py-2">
+                <input type="checkbox" class="select-checkbox" onclick="handleCheckboxChange(this, ${index})" />
+            </td>
+
+            <!-- First Name Column -->
+            <td class="border px-4 py-2 editable" data-field="firstName">${user.firstName}</td>
+
+            <!-- Last Name Column -->
+            <td class="border px-4 py-2 editable" data-field="lastName">${user.lastName}</td>
+
+            <!-- Email Column -->
+            <td class="border px-4 py-2 editable" data-field="email">${user.email}</td>
+
+            <!-- Actions Column -->
+            <td class="border px-4 py-2">
+                <button class="bg-yellow-500 text-white p-1 rounded" onclick="editUser(${index})" disabled>Modifier</button>
+                <button class="bg-red-500 text-white p-1 rounded" onclick="deleteUser(${index})">Supprimer</button>
+            </td>
+        </tr>
                   `;
               });
           }
